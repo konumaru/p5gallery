@@ -47,20 +47,20 @@ const initializeSketch = (p: p5) => {
   p.touchMoved = () => touchMoved(p);
 };
 
-const P5Wrapper: React.FC = () => {
+const P5Canvas: React.FC = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    const p5Instance = new p5(initializeSketch, canvasRef.current);
+    const P5Instance = new p5(initializeSketch, canvasRef.current);
 
     return () => {
-      p5Instance.remove();
+      P5Instance.remove();
     };
   }, []);
 
   return <div ref={canvasRef}></div>;
 };
 
-export default P5Wrapper;
+export default P5Canvas;
