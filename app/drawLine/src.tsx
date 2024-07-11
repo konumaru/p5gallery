@@ -16,9 +16,7 @@ const setup = (p: p5) => {
 
 const draw = (p: p5) => {
   if (sketchState.isDrawing) {
-    p.stroke(0);
-    p.strokeWeight(2);
-    p.line(p.pmouseX, p.pmouseY, p.mouseX, p.mouseY);
+    drawLine(p);
   }
 };
 
@@ -30,12 +28,23 @@ const mouseReleased = () => {
   sketchState.isDrawing = false;
 };
 
+function drawLine(p: p5) {
+  p.stroke(0);
+  p.strokeWeight(2);
+  p.line(p.pmouseX, p.pmouseY, p.mouseX, p.mouseY);
+}
+
+const touchMoved = (p: p5) => {
+  drawLine(p);
+}
+
 // p5インスタンスを初期化する関数
 const initializeSketch = (p: p5) => {
   p.setup = () => setup(p);
   p.draw = () => draw(p);
   p.mousePressed = mousePressed;
   p.mouseReleased = mouseReleased;
+  p.touchMoved = () => touchMoved(p);
 };
 
 const P5Wrapper: React.FC = () => {
