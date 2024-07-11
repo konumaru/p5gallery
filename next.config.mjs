@@ -2,7 +2,7 @@
 
 const nextConfig = {
     output: "export",
-    basePath: ".",
+    basePath: "_next",
 };
 
 export default nextConfig;
