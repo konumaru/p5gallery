@@ -16,7 +16,9 @@ export default function Page() {
             <Header />
             <div>
                 <h1>p5.js Circle Example</h1>
-                <P5Canvas />
+                <div className="touch-none overflow-hidden">
+                    <P5Canvas />
+                </div>
             </div>
         </>
     )
