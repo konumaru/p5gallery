@@ -22,7 +22,7 @@ export default function Page() {
                         </Link>
                         <span className="mx-2 text-gray-500">/</span>
                     </li>
-                    <li className="text-gray-700">p5.js Circle Example</li>
+                    <li className="text-gray-700">{directoryName}</li>
                 </ol>
             </nav>
             
