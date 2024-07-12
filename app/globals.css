@@ -17,7 +17,6 @@
 }
 
 body {
-  position: fixed;
   overflow: hidden;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -31,5 +30,17 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@layer components {
+  .artwork-link {
+    @apply text-blue-600 underline hover:text-blue-800 hover:no-underline transition-all duration-300;
+  }
+}
+
+@layer components {
+  .home-link {
+    @apply text-blue-600 underline hover:text-blue-800 hover:no-underline transition-all duration-300;
   }
 }

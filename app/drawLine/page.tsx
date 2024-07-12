@@ -1,25 +1,34 @@
 import dynamic from 'next/dynamic';
-import Header from '../Header';
+import Link from 'next/link';
+
+const directoryName = 'drawCircle';
 
 export const metadata = {
-    title: 'drawLine',
+    title: directoryName,
 }
 
-const P5Canvas = dynamic(() => import('./src'), {
+const P5Wrapper = dynamic(() => import('./src'), {
   ssr: false
 });
-
+  
 
 export default function Page() {
     return (
-        <>
-            <Header />
-            <div>
-                <h1>p5.js Circle Example</h1>
-                <div className="touch-none overflow-hidden">
-                    <P5Canvas />
-                </div>
-            </div>
-        </>
+        <div>
+            <nav className="text-sm breadcrumbs">
+                <ol className="list-none p-1 inline-flex">
+                    <li className="flex items-center">
+                        <Link href="/" className="text-blue-600 hover:text-blue-800">
+                            Home
+                        </Link>
+                        <span className="mx-2 text-gray-500">/</span>
+                    </li>
+                    <li className="text-gray-700">p5.js Circle Example</li>
+                </ol>
+            </nav>
+            
+            <h1 className="text-xl font-bold mb-1 p-1">{directoryName}</h1>
+            <P5Wrapper />
+        </div>
     )
 }

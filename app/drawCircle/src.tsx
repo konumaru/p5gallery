@@ -14,7 +14,7 @@ const P5Wrapper: React.FC = () => {
     const sketch = (p: p5) => {
       p.setup = () => {
         p.createCanvas(window.innerWidth, window.innerHeight);
-        p.background(255);
+        p.background(243, 244, 246);
       };
 
       p.draw = () => {
