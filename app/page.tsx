@@ -7,9 +7,6 @@ export default function Home() {
       <h1 className="text-4xl text-center font-bold mb-8 text-gray-800 ">konumaru&apos;s P5Gallery</h1>
       <ul className="space-y-4">
         <li>
-          <Link href="/drawCircle" className="artwork-link text-2xl">drawCircle</Link>
-        </li>
-        <li>
           <Link href="/drawLine" className="artwork-link text-2xl">drawLine</Link>
         </li>
       </ul>

@@ -7,14 +7,14 @@ export const metadata = {
     title: directoryName,
 }
 
-const P5Wrapper = dynamic(() => import('./src'), {
+const P5Canvas = dynamic(() => import('./src'), {
   ssr: false
 });
   
 
 export default function Page() {
     return (
-        <div>
+        <div className='bg-white'>
             <nav className="text-sm breadcrumbs">
                 <ol className="list-none p-1 inline-flex">
                     <li className="flex items-center">
@@ -27,8 +27,8 @@ export default function Page() {
                 </ol>
             </nav>
             
-            <h1 className="text-xl font-bold mb-1 p-1">{directoryName}</h1>
-            <P5Wrapper />
+            <h1 className="text-xl text-black font-bold mb-1 p-1">{directoryName}</h1>
+            <P5Canvas />
         </div>
     )
 }
