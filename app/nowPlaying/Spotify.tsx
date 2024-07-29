@@ -70,4 +70,15 @@ export const getNowPlaying = async () => {
     return response.json();
 };
 
+export const getTrackFeatures = async (track_id: string) => {
+    const { access_token } = await getAccessToken();
+    const TRACK_FEATURES_ENDPOINT = path.join(BASE_ADDRESS, 'audio-features/', track_id);
 
+    const response = await fetch(TRACK_FEATURES_ENDPOINT, {
+        headers: {
+            Authorization: `Bearer ${access_token}`
+        }
+    });
+
+    return response.json();
+}

@@ -3,6 +3,21 @@
 import p5 from 'p5';
 import React, { useEffect, useRef } from 'react';
 
+interface TrackInfo {
+    id: string,
+    name: string,
+    artist: string,
+    danceability: number,
+    energy: number,
+    key: number,
+    loudness: number,
+    speechiness: number,
+    acousticness: number,
+    instrumentalness: number,
+    liveness: number,
+    valence: number,
+    tempo: number,
+}
 
 const setup = (p: p5) => {
     p.createCanvas(window.innerWidth, window.innerHeight);
@@ -19,7 +34,8 @@ const initializeSketch = (p: p5) => {
     p.draw = () => draw(p);
 };
 
-const P5Canvas: React.FC = () => {
+// const P5Canvas: React.FC = () => {
+const P5Canvas: React.FC<{ trackInfo: TrackInfo | null }> = ({ trackInfo }) => {
     const canvasRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
