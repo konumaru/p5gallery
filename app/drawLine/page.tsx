@@ -8,9 +8,9 @@ export const metadata = {
 }
 
 const P5Canvas = dynamic(() => import('./src'), {
-  ssr: false
+    ssr: false
 });
-  
+
 
 export default function Page() {
     return (
@@ -26,8 +26,9 @@ export default function Page() {
                     <li className="text-gray-700">{directoryName}</li>
                 </ol>
             </nav>
-            
+
             <h1 className="text-xl text-black font-bold mb-1 p-1">{directoryName}</h1>
+
             <P5Canvas />
         </div>
     )
