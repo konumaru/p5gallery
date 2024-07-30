@@ -3,6 +3,10 @@
 import p5 from 'p5';
 import React, { useEffect, useRef } from 'react';
 
+const sketchState = {
+  isDrawing: false
+};
+
 class Ripple {
   x: number;
   y: number;
@@ -61,8 +65,6 @@ const P5Canvas: React.FC = () => {
     let defaultAmplitude = 10;
     let currentAmplitude = 10;
 
-    let is_mouse_dragged = false;
-
     const sketch = (p: p5) => {
       p.setup = () => {
         const width = p.min(p.windowWidth, 960);
@@ -84,7 +86,7 @@ const P5Canvas: React.FC = () => {
         let xoff = 0;
         p.stroke(200);
 
-        if (is_mouse_dragged) {
+        if (sketchState.isDrawing) {
           currentAmplitude = p.lerp(currentAmplitude, draggedAmplitude, 0.1);
         } else {
           currentAmplitude = p.lerp(currentAmplitude, defaultAmplitude, 0.01);
@@ -112,11 +114,11 @@ const P5Canvas: React.FC = () => {
 
       p.mouseDragged = () => {
         ripples.push(new Ripple(p.mouseX, p.mouseY, 0, 0));
-        is_mouse_dragged = true;
+        sketchState.isDrawing = true;
       };
 
       p.mouseReleased = () => {
-        is_mouse_dragged = false;
+        sketchState.isDrawing = false;
       };
 
     };
