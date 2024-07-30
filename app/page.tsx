@@ -9,6 +9,9 @@ export default function Home() {
         <li>
           <Link href="/drawLine" className="artwork-link text-2xl">drawLine</Link>
         </li>
+        <li>
+          <Link href="/waterRipple" className="artwork-link text-2xl">waterRipple</Link>
+        </li>
       </ul>
     </main>
   )
