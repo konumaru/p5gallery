@@ -52,9 +52,7 @@ const P5Canvas: React.FC = () => {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-
     const P5Instance = new p5(initializeSketch, canvasRef.current);
-
     return () => {
       P5Instance.remove();
     };

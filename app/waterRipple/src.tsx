@@ -55,85 +55,92 @@ class Ripple {
   }
 }
 
+const setup = (p: p5) => {
+  const width = p.min(p.windowWidth, 960);
+  const height = p.min(p.windowHeight, 720);
+  p.createCanvas(width, height);
+}
+
+
+let ripples: Ripple[] = [];
+let yoff = 0;
+let draggedAmplitude = 70;
+let defaultAmplitude = 10;
+let currentAmplitude = 10;
+
+const draw = (p: p5) => {
+  p.background(0, 120, 220);
+  // 波紋を描画
+  for (let i = ripples.length - 1; i >= 0; i--) {
+    ripples[i].update();
+    ripples[i].display(p);
+    if (ripples[i].isFinished()) {
+      ripples.splice(i, 1);
+    }
+  }
+  // 水面の揺らぎを描画
+  let xoff = 0;
+  p.stroke(200);
+
+  if (sketchState.isDrawing) {
+    currentAmplitude = p.lerp(currentAmplitude, draggedAmplitude, 0.1);
+  } else {
+    currentAmplitude = p.lerp(currentAmplitude, defaultAmplitude, 0.01);
+  }
+
+  let prevX = 0;
+  let prevY = p.height / 2;
+
+  for (let x = 0; x <= p.width + 5; x += 5) {
+    let y1 = p.map(p.noise(xoff, yoff), 0, 1, -currentAmplitude, currentAmplitude);
+    let y2 = p.map(p.noise(xoff * 2, yoff * 2), 0, 1, -currentAmplitude / 2, currentAmplitude / 2);
+    let y = p.height / 2 + y1 + y2;
+
+    if (x > 0) {
+      p.line(prevX, prevY, x, y);
+    }
+
+    prevX = x;
+    prevY = y;
+    xoff += 0.03;
+  }
+
+  yoff += 0.005;
+}
+
+const mousePressed = () => {
+  sketchState.isDrawing = true;
+}
+
+const mouseReleased = () => {
+  sketchState.isDrawing = false;
+}
+
+const touchMoved = (p: p5) => {
+  sketchState.isDrawing = true;
+  ripples.push(new Ripple(p.mouseX, p.mouseY, 0, 0));
+}
+
+const initializeSketch = (p: p5) => {
+  p.setup = () => setup(p);
+  p.draw = () => draw(p);
+  p.mousePressed = mousePressed;
+  p.mouseReleased = mouseReleased;
+  p.touchMoved = () => touchMoved(p);
+};
+
 const P5Canvas: React.FC = () => {
-  const sketchRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let ripples: Ripple[] = [];
-    let yoff = 0;
-    let draggedAmplitude = 70;
-    let defaultAmplitude = 10;
-    let currentAmplitude = 10;
-
-    const sketch = (p: p5) => {
-      p.setup = () => {
-        const width = p.min(p.windowWidth, 960);
-        const height = p.min(p.windowHeight, 720);
-        p.createCanvas(width, height);
-      };
-
-      p.draw = () => {
-        p.background(0, 120, 220);
-        // 波紋を描画
-        for (let i = ripples.length - 1; i >= 0; i--) {
-          ripples[i].update();
-          ripples[i].display(p);
-          if (ripples[i].isFinished()) {
-            ripples.splice(i, 1);
-          }
-        }
-        // 水面の揺らぎを描画
-        let xoff = 0;
-        p.stroke(200);
-
-        if (sketchState.isDrawing) {
-          currentAmplitude = p.lerp(currentAmplitude, draggedAmplitude, 0.1);
-        } else {
-          currentAmplitude = p.lerp(currentAmplitude, defaultAmplitude, 0.01);
-        }
-
-        let prevX = 0;
-        let prevY = p.height / 2;
-
-        for (let x = 0; x <= p.width + 5; x += 5) {
-          let y1 = p.map(p.noise(xoff, yoff), 0, 1, -currentAmplitude, currentAmplitude);
-          let y2 = p.map(p.noise(xoff * 2, yoff * 2), 0, 1, -currentAmplitude / 2, currentAmplitude / 2);
-          let y = p.height / 2 + y1 + y2;
-
-          if (x > 0) {
-            p.line(prevX, prevY, x, y);
-          }
-
-          prevX = x;
-          prevY = y;
-          xoff += 0.03;
-        }
-
-        yoff += 0.005;
-      };
-
-      p.mouseDragged = () => {
-        ripples.push(new Ripple(p.mouseX, p.mouseY, 0, 0));
-      };
-
-      p.mousePressed = () => {
-        sketchState.isDrawing = true;
-      }
-
-      p.mouseReleased = () => {
-        sketchState.isDrawing = false;
-      };
-
-    };
-
-    const p5Instance = new p5(sketch, sketchRef.current!);
-
+    if (!canvasRef.current) return;
+    const P5Instance = new p5(initializeSketch, canvasRef.current);
     return () => {
-      p5Instance.remove();
+      P5Instance.remove();
     };
   }, []);
 
-  return <div ref={sketchRef}></div>;
+  return <div ref={canvasRef}></div>;
 };
 
 export default P5Canvas;
