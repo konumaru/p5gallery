@@ -28,21 +28,29 @@ class Ripple {
   }
 
   display(p: p5) {
-    p.noFill();
-    for (let i = 0; i < p.TWO_PI; i += 0.1) {
-      let x = this.x + p.cos(i) * this.radius;
-      let y = this.y + p.sin(i) * this.radius;
-      let alpha = p.map(p.cos(i - p.atan2(this.dy, this.dx)), -1, 1, 0, this.opacity);
+    p.fill(0, 120, 220, this.opacity);
+    p.push();
+    p.translate(this.x, this.y);
+
+    const segments = 25;  // 波紋の分割数
+    for (let i = 0; i < segments; i++) {
+      const startAngle = (i / segments) * p.TWO_PI;
+      const endAngle = ((i + 1) / segments) * p.TWO_PI;
+      const midAngle = (startAngle + endAngle) / 2;
+
+      const alpha = p.map(p.cos(midAngle - p.atan2(this.dy, this.dx)), -1, 1, 0, this.opacity);
       p.stroke(255, 255, 255, alpha);
-      p.point(x, y);
+      // p.strokeWeight(2);  // 線の太さを調整
+      p.arc(0, 0, this.radius * 2, this.radius * 2, startAngle, endAngle);
     }
+
+    p.pop();
   }
 
   isFinished() {
     return this.opacity <= 0;
   }
 }
-
 
 const P5Canvas: React.FC = () => {
   const sketchRef = useRef<HTMLDivElement>(null);
@@ -62,32 +70,7 @@ const P5Canvas: React.FC = () => {
       };
 
       p.draw = () => {
-        p.background(0, 100, 200);
-        // 水面の揺らぎを描画
-        p.beginShape();
-        p.stroke(255, 255, 255, 80);
-
-        let xoff = 0;
-        if (is_mouse_dragged) {
-          currentAmplitude = p.lerp(currentAmplitude, draggedAmplitude, 0.1);
-        } else {
-          currentAmplitude = p.lerp(currentAmplitude, defaultAmplitude, 0.01);
-        }
-        for (let x = 0; x <= p.width + 5; x += 5) {
-          let y1 = p.map(p.noise(xoff, yoff), 0, 1, -currentAmplitude, currentAmplitude);
-          let y2 = p.map(p.noise(xoff * 2, yoff * 2), 0, 1, -currentAmplitude / 2, currentAmplitude / 2);
-          let y = p.height / 2 + y1 + y2;
-
-          p.fill(p.color(0, 120, 220, 50));
-          p.vertex(x, y);
-          xoff += 0.03;
-        }
-        p.vertex(p.width, p.height);
-        p.vertex(0, p.height);
-        p.endShape(p.CLOSE);
-
-        yoff += 0.005;
-
+        p.background(0, 120, 220);
         // 波紋を描画
         for (let i = ripples.length - 1; i >= 0; i--) {
           ripples[i].update();
@@ -96,6 +79,34 @@ const P5Canvas: React.FC = () => {
             ripples.splice(i, 1);
           }
         }
+        // 水面の揺らぎを描画
+        let xoff = 0;
+        p.stroke(200);
+
+        if (is_mouse_dragged) {
+          currentAmplitude = p.lerp(currentAmplitude, draggedAmplitude, 0.1);
+        } else {
+          currentAmplitude = p.lerp(currentAmplitude, defaultAmplitude, 0.01);
+        }
+
+        let prevX = 0;
+        let prevY = p.height / 2;
+
+        for (let x = 0; x <= p.width + 5; x += 5) {
+          let y1 = p.map(p.noise(xoff, yoff), 0, 1, -currentAmplitude, currentAmplitude);
+          let y2 = p.map(p.noise(xoff * 2, yoff * 2), 0, 1, -currentAmplitude / 2, currentAmplitude / 2);
+          let y = p.height / 2 + y1 + y2;
+
+          if (x > 0) {
+            p.line(prevX, prevY, x, y);
+          }
+
+          prevX = x;
+          prevY = y;
+          xoff += 0.03;
+        }
+
+        yoff += 0.005;
       };
 
       p.mouseDragged = () => {
