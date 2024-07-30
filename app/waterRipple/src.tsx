@@ -43,12 +43,18 @@ class Ripple {
   }
 }
 
+
 const P5Canvas: React.FC = () => {
   const sketchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let ripples: Ripple[] = [];
     let yoff = 0;
+    let draggedAmplitude = 70;
+    let defaultAmplitude = 10;
+    let currentAmplitude = 10;
+
+    let is_mouse_dragged = false;
 
     const sketch = (p: p5) => {
       p.setup = () => {
@@ -59,23 +65,29 @@ const P5Canvas: React.FC = () => {
         p.background(0, 100, 200);
         // 水面の揺らぎを描画
         p.beginShape();
-        p.fill(0, 120, 220, 50);
+        p.stroke(255, 255, 255, 80);
+
         let xoff = 0;
-        for (let x = 0; x <= p.width; x += 10) {
-          let y = p.map(p.noise(xoff, yoff), 0, 1, p.height / 2 - 20, p.height / 2 + 20);
-          if (ripples.length > 0 && ripples.length < 20) {
-            p.stroke(255, 255, 255);
-          } else {
-            let alpha = p.map(p.abs(p.width / 2 - x), 0, p.width / 2, 255, 0);
-            p.stroke(255, 255, 255, 100);
-          };
+        if (is_mouse_dragged) {
+          currentAmplitude = p.lerp(currentAmplitude, draggedAmplitude, 0.1);
+        } else {
+          currentAmplitude = p.lerp(currentAmplitude, defaultAmplitude, 0.01);
+        }
+        for (let x = 0; x <= p.width + 5; x += 5) {
+          let y1 = p.map(p.noise(xoff, yoff), 0, 1, -currentAmplitude, currentAmplitude);
+          let y2 = p.map(p.noise(xoff * 2, yoff * 2), 0, 1, -currentAmplitude / 2, currentAmplitude / 2);
+          let y = p.height / 2 + y1 + y2;
+
+          p.fill(p.color(0, 120, 220, 50));
           p.vertex(x, y);
-          xoff += 0.05;
+          xoff += 0.03;
         }
         p.vertex(p.width, p.height);
         p.vertex(0, p.height);
         p.endShape(p.CLOSE);
-        yoff += 0.01;
+
+        yoff += 0.005;
+
         // 波紋を描画
         for (let i = ripples.length - 1; i >= 0; i--) {
           ripples[i].update();
@@ -88,7 +100,13 @@ const P5Canvas: React.FC = () => {
 
       p.mouseDragged = () => {
         ripples.push(new Ripple(p.mouseX, p.mouseY, 0, 0));
+        is_mouse_dragged = true;
       };
+
+      p.mouseReleased = () => {
+        is_mouse_dragged = false;
+      };
+
     };
 
     const p5Instance = new p5(sketch, sketchRef.current!);
