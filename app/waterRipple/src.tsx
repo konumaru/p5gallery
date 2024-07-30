@@ -40,7 +40,6 @@ class Ripple {
 
       const alpha = p.map(p.cos(midAngle - p.atan2(this.dy, this.dx)), -1, 1, 0, this.opacity);
       p.stroke(255, 255, 255, alpha);
-      // p.strokeWeight(2);  // 線の太さを調整
       p.arc(0, 0, this.radius * 2, this.radius * 2, startAngle, endAngle);
     }
 
@@ -66,7 +65,9 @@ const P5Canvas: React.FC = () => {
 
     const sketch = (p: p5) => {
       p.setup = () => {
-        p.createCanvas(p.windowWidth, p.windowHeight);
+        const width = p.min(p.windowWidth, 960);
+        const height = p.min(p.windowHeight, 720);
+        p.createCanvas(width, height);
       };
 
       p.draw = () => {
