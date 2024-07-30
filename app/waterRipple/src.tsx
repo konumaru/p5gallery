@@ -114,8 +114,11 @@ const P5Canvas: React.FC = () => {
 
       p.mouseDragged = () => {
         ripples.push(new Ripple(p.mouseX, p.mouseY, 0, 0));
-        sketchState.isDrawing = true;
       };
+
+      p.mousePressed = () => {
+        sketchState.isDrawing = true;
+      }
 
       p.mouseReleased = () => {
         sketchState.isDrawing = false;
