@@ -87,6 +87,7 @@ const draw = (p: p5) => {
   } else {
     currentAmplitude = p.lerp(currentAmplitude, defaultAmplitude, 0.01);
   }
+  console.log(sketchState.isDrawing, currentAmplitude);
 
   let prevX = 0;
   let prevY = p.height / 2;
@@ -117,8 +118,16 @@ const mouseReleased = () => {
 }
 
 const touchMoved = (p: p5) => {
-  sketchState.isDrawing = true;
   ripples.push(new Ripple(p.mouseX, p.mouseY, 0, 0));
+  sketchState.isDrawing = true;
+}
+
+const touchStarted = () => {
+  sketchState.isDrawing = true;
+}
+
+const touchEnded = () => {
+  sketchState.isDrawing = false;
 }
 
 const initializeSketch = (p: p5) => {
@@ -127,6 +136,8 @@ const initializeSketch = (p: p5) => {
   p.mousePressed = mousePressed;
   p.mouseReleased = mouseReleased;
   p.touchMoved = () => touchMoved(p);
+  p.touchStarted = touchStarted;
+  p.touchEnded = touchEnded;
 };
 
 const P5Canvas: React.FC = () => {

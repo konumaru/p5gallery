@@ -38,6 +38,15 @@ const touchMoved = (p: p5) => {
   drawLine(p);
 }
 
+const touchStarted = () => {
+  sketchState.isDrawing = true;
+}
+
+const touchEnded = () => {
+  sketchState.isDrawing = false;
+}
+
+
 // p5インスタンスを初期化する関数
 const initializeSketch = (p: p5) => {
   p.setup = () => setup(p);
@@ -45,6 +54,8 @@ const initializeSketch = (p: p5) => {
   p.mousePressed = mousePressed;
   p.mouseReleased = mouseReleased;
   p.touchMoved = () => touchMoved(p);
+  p.touchStarted = touchStarted;
+  p.touchEnded = touchEnded;
 };
 
 const P5Canvas: React.FC = () => {
