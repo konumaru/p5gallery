@@ -130,7 +130,7 @@ const touchEnded = () => {
   sketchState.isDrawing = false;
 }
 
-const initializeSketch = (p: p5) => {
+const sketch = (p: p5) => {
   p.setup = () => setup(p);
   p.draw = () => draw(p);
   p.mousePressed = mousePressed;
@@ -145,7 +145,7 @@ const P5Canvas: React.FC = () => {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    const P5Instance = new p5(initializeSketch, canvasRef.current);
+    const P5Instance = new p5(sketch, canvasRef.current);
     return () => {
       P5Instance.remove();
     };
