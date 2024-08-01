@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
-const directoryName = 'waterRipple';
+const directoryName = 'fishRipple';
 
 export const metadata = {
     title: directoryName,

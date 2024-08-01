@@ -10,7 +10,7 @@ export default function Home() {
           <Link href="/drawLine" className="artwork-link text-2xl">drawLine</Link>
         </li>
         <li>
-          <Link href="/waterRipple" className="artwork-link text-2xl">waterRipple</Link>
+          <Link href="/fishRipple" className="artwork-link text-2xl">fishRipple</Link>
         </li>
       </ul>
     </main>

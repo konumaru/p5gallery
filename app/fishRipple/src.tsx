@@ -2,10 +2,13 @@
 
 import p5 from 'p5';
 import React, { useEffect, useRef } from 'react';
+import { Fish } from './Fish';
 
 const sketchState = {
   isDrawing: false
 };
+
+let fishes: Fish[] = [];
 
 class Ripple {
   x: number;
@@ -59,6 +62,10 @@ const setup = (p: p5) => {
   const width = p.min(p.windowWidth, 960);
   const height = p.min(p.windowHeight, 720);
   p.createCanvas(width, height);
+
+  for (let i = 0; i < 10; i++) {
+    fishes.push(new Fish(p));
+  }
 }
 
 
@@ -78,35 +85,12 @@ const draw = (p: p5) => {
       ripples.splice(i, 1);
     }
   }
-  // 水面の揺らぎを描画
-  let xoff = 0;
-  p.stroke(200);
-
-  if (sketchState.isDrawing) {
-    currentAmplitude = p.lerp(currentAmplitude, draggedAmplitude, 0.1);
-  } else {
-    currentAmplitude = p.lerp(currentAmplitude, defaultAmplitude, 0.01);
-  }
-  console.log(sketchState.isDrawing, currentAmplitude);
-
-  let prevX = 0;
-  let prevY = p.height / 2;
-
-  for (let x = 0; x <= p.width + 5; x += 5) {
-    let y1 = p.map(p.noise(xoff, yoff), 0, 1, -currentAmplitude, currentAmplitude);
-    let y2 = p.map(p.noise(xoff * 2, yoff * 2), 0, 1, -currentAmplitude / 2, currentAmplitude / 2);
-    let y = p.height / 2 + y1 + y2;
-
-    if (x > 0) {
-      p.line(prevX, prevY, x, y);
-    }
-
-    prevX = x;
-    prevY = y;
-    xoff += 0.03;
-  }
-
-  yoff += 0.005;
+  // 魚を描画
+  fishes.forEach(fish => {
+    fish.avoidMouse(100);
+    fish.update();
+    fish.display();
+  });
 }
 
 const mousePressed = () => {
