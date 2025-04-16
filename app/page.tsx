@@ -16,7 +16,7 @@ export default function Home() {
           <Link href="/fishRipple" className="artwork-link text-2xl">fishRipple</Link>
         </li>
         <li>
-          <Link href="/geometricPatterns" className="artwork-link text-2xl">geometricPatterns</Link>
+          <Link href="/livingPatterns" className="artwork-link text-2xl">livingPatterns</Link>
         </li>
 
       </ul>
