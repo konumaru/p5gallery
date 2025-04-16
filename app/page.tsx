@@ -15,6 +15,9 @@ export default function Home() {
         <li>
           <Link href="/fishRipple" className="artwork-link text-2xl">fishRipple</Link>
         </li>
+        <li>
+          <Link href="/geometricPatterns" className="artwork-link text-2xl">geometricPatterns</Link>
+        </li>
 
       </ul>
     </main>
