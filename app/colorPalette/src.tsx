@@ -52,11 +52,11 @@ const sketch = (p: p5) => {
                 const x = startX + col * (cellSize + cellPadding);
                 const y = startY + row * (cellSize + cellPadding);
 
-                // 基本となる色のインデックスを選択（列ごとに変える）
-                const baseColorIndex = col % palette.length;
+                // 基本となる色のインデックスを選択（行ごとに変える）
+                const baseColorIndex = row % palette.length;
 
-                // 行ごとに透明度を変える（上から下へ透明度が下がる）
-                const alpha = p.map(row, 0, gridSize - 1, 1.0, 0.4); // 透明度を1.0から0.4の範囲で変化
+                // 列ごとに透明度を変える（左から右へ透明度が下がる）
+                const alpha = p.map(col, 0, gridSize - 1, 1.0, 0.4); // 透明度を1.0から0.4の範囲で変化
 
                 // 元の色を取得し、透明度を設定
                 const baseColor = p.color(palette[baseColorIndex]);
